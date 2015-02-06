@@ -2,6 +2,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+def color_mesh(func, x, y, xlog=False, ylog=False, *args, **kwargs):
+    """
+    Makes a mesh of x and y and evaluates the function at each value
+    in order to make a 3D heatmap of the data. Output can be supplied 
+    directly to pcolormesh for plotting
+    """
+    
+    dy = y[1] - y[0]
+    dx = x[1] - x[0]
+    
+    ymesh, xmesh = np.meshgrid(y - 0.5*dy, x - 0.5*dx)    
+    
+    xeval = xmesh; yeval = ymesh
+    if xlog:
+        xeval = 10**xmesh
+    if ylog:
+        yeval = 10**ymesh   
+        
+    cmesh = func(xeval, yeval,*args,**kwargs)
+    
+    return xmesh, ymesh, cmesh
+    
 
 def my_histogram2d(x, y, xbins=None, ybins=None, logscale=False,
                                                   vfloor = None):
